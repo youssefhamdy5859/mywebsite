@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="يوسف حمدي — محاسب عمليات مالية | قيود يومية، تسويات بنكية، مطابقات الموردين، تصفية عهد المناديب. خبرة سنتين." />
+  <title>يوسف حمدي | محاسب عمليات مالية</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <!-- Top Progress (subtle) -->
+  <div class="scroll-progress" aria-hidden="true">
+    <div class="scroll-progress__bar" id="progressBar"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a class="brand" href="#home" aria-label="العودة إلى الأعلى">
+        <span class="brand__mark" aria-hidden="true">YH</span>
+        <span class="brand__text">يوسف حمدي</span>
+      </a>
+
+      <nav class="nav" aria-label="التنقل الداخلي">
+        <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">
+          <span class="sr-only">فتح/إغلاق القائمة</span>
+          <span class="nav__burger" aria-hidden="true"></span>
+        </button>
+
+        <ul class="nav__menu" id="navMenu">
+          <li><a href="#about">من أنا</a></li>
+          <li><a href="#skills">المهارات</a></li>
+          <li><a href="#projects">الأعمال</a></li>
+          <li><a href="#experience">الخبرات</a></li>
+          <li><a href="#services">الخدمات</a></li>
+          <li><a href="#objective">الهدف المهني</a></li>
+          <li><a href="#contact">تواصل</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="تبديل الوضع الليلي/النهاري">
+          <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+          <span class="theme-toggle__text">Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="home">
+      <div class="container hero__grid">
+        <div class="hero__content reveal">
+          <p class="badge">
+            <span class="badge__dot" aria-hidden="true"></span>
+            متاح لفرص عمل • مشاريع عن بُعد • مهام حسب الطلب
+          </p>
+
+          <h1 class="hero__title">
+            يوسف حمدي
+            <span class="hero__title-accent">محاسب عمليات مالية</span>
+          </h1>
+
+          <p class="hero__subtitle">
+            أُحَوِّل التفاصيل اليومية إلى نظام مالي مضبوط: قيود دقيقة، تسويات بنكية واضحة،
+            مطابقات موردين بلا فروقات، وتصفية عهد منظمة—لأرقام يمكن الاعتماد عليها.
+          </p>
+
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#projects">عرض الأعمال</a>
+            <a class="btn btn--ghost" href="#contact">تواصل معي</a>
+          </div>
+
+          <div class="hero__meta">
+            <div class="meta-card">
+              <span class="meta-card__label">الخبرة</span>
+              <span class="meta-card__value">سنتان</span>
+            </div>
+            <div class="meta-card">
+              <span class="meta-card__label">المجال</span>
+              <span class="meta-card__value">شركات تجارية</span>
+            </div>
+            <div class="meta-card">
+              <span class="meta-card__label">الأدوات</span>
+              <span class="meta-card__value">ERP • Excel</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__card reveal">
+          <div class="profile">
+            <div class="profile__photo" aria-hidden="true">
+              <!-- Photo Placeholder -->
+              <img
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80"
+                alt="صورة شخصية احترافية - عنصر بديل"
+                loading="lazy"
+              />
+            </div>
+            <div class="profile__body">
+              <h2 class="profile__name">يوسف حمدي</h2>
+              <p class="profile__role">Accounting Operations • Reconciliations • Vendor Matching</p>
+
+              <ul class="profile__highlights">
+                <li>تسويات بنكية دقيقة بدون ضوضاء</li>
+                <li>مطابقات موردين لاكتشاف الفروقات مبكرًا</li>
+                <li>تصفية عهد مناديب بمنهجية وإثباتات واضحة</li>
+              </ul>
+
+              <div class="profile__quick">
+                <a class="chip" href="#skills">مهاراتي</a>
+                <a class="chip" href="#experience">خبراتي</a>
+                <a class="chip" href="#contact">تواصل سريع</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <a class="scroll-hint" href="#about" aria-label="الانتقال إلى قسم من أنا">
+        <span class="scroll-hint__mouse" aria-hidden="true"></span>
+        <span class="scroll-hint__text">مرّر للأسفل</span>
+      </a>
+    </section>
+
+    <!-- About -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">من أنا</h2>
+          <p class="section__desc">
+            نبذة مختصرة تساعد مسؤولي التوظيف والعملاء على فهم القيمة التي أضيفها بسرعة.
+          </p>
+        </div>
+
+        <div class="about">
+          <div class="about__text reveal">
+            <p class="lead">
+              أنا يوسف حمدي، محاسب عمليات مالية بخبرة سنتين في بيئة شركات تجارية. أؤمن أن
+              قوة المالية ليست في “تسجيل رقم” بل في بناء مسار واضح من المستند إلى القيد إلى التقرير.
+            </p>
+            <p>
+              أعمل بمنهجية تعتمد على الدقة، التتبع، والوضوح: تسجيل قيود يومية وفق مستندات سليمة،
+              تسويات بنكية تكشف الفروقات بدلًا من إخفائها، مطابقات موردين تمنع تراكم الأخطاء،
+              وتصفية عهد مناديب بإثباتات منظمة تساعد الإدارة على اتخاذ قرار سريع.
+            </p>
+            <div class="about__stats">
+              <div class="stat">
+                <span class="stat__num">4+</span>
+                <span class="stat__label">مجالات تشغيلية يومية</span>
+              </div>
+              <div class="stat">
+                <span class="stat__num">2</span>
+                <span class="stat__label">سنوات خبرة عملية</span>
+              </div>
+              <div class="stat">
+                <span class="stat__num">ERP</span>
+                <span class="stat__label">مع Excel كقوة إضافية</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="about__card reveal" aria-label="بطاقة معلومات">
+            <h3 class="card-title">معلومات سريعة</h3>
+            <ul class="info-list">
+              <li><span>الدور:</span> محاسب مبتدئ (عمليات مالية)</li>
+              <li><span>التركيز:</span> القيود • العهد • الموردين • البنوك</li>
+              <li><span>أسلوب العمل:</span> منهجي • دقيق • توثيق قوي</li>
+              <li><span>نمط الخدمة:</span> حسب الطلب</li>
+            </ul>
+            <a class="btn btn--soft" href="#contact">اطلب عرض/تعاون</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="section section--alt" id="skills">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">المهارات</h2>
+          <p class="section__desc">
+            مهارات عملية مرتبطة مباشرة بنتائج يمكن قياسها في العمل اليومي.
+          </p>
+        </div>
+
+        <div class="skills-grid">
+          <article class="skill-card reveal">
+            <h3>العمليات المحاسبية</h3>
+            <ul class="tags">
+              <li>تسجيل القيود اليومية</li>
+              <li>مطابقة أرصدة الموردين</li>
+              <li>تصفية عهد المناديب</li>
+              <li>متابعة المستندات والتوثيق</li>
+            </ul>
+          </article>
+
+          <article class="skill-card reveal">
+            <h3>المطابقات والتسويات</h3>
+            <ul class="tags">
+              <li>التسويات البنكية</li>
+              <li>تحليل الفروقات</li>
+              <li>تتبع الحركات غير المطابقة</li>
+              <li>تحسين جودة القيود</li>
+            </ul>
+          </article>
+
+          <article class="skill-card reveal">
+            <h3>الأنظمة والأدوات</h3>
+            <ul class="tags">
+              <li>أنظمة ERP</li>
+              <li>Excel (تحليل وتنظيم)</li>
+              <li>قوالب تقارير تشغيلية</li>
+              <li>تنظيم ملفات وأرشفة</li>
+            </ul>
+          </article>
+
+          <article class="skill-card reveal">
+            <h3>إعداد تقارير مبسطة</h3>
+            <ul class="tags">
+              <li>تقارير حركة الحسابات</li>
+              <li>ملخصات شهرية تشغيلية</li>
+              <li>تقارير موردين/عملاء</li>
+              <li>عرض أرقام قابل للقرار</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">أعمال مختارة</h2>
+          <p class="section__desc">
+            نماذج عمل “قابلة للتطبيق” تمثل طريقتي في التنظيم والتدقيق—مع روابط كعناصر بديلة.
+          </p>
+        </div>
+
+        <div class="projects-grid">
+          <article class="project-card reveal">
+            <div class="project-card__top">
+              <h3>نظام تصفية عهد المناديب</h3>
+              <span class="pill">Reconciliation</span>
+            </div>
+            <p>
+              قالب عمل لتجميع المصروفات، التحقق من المستندات، مطابقة التواريخ، وإخراج ملخص فروقات واضح
+              يساعد على الإقفال الشهري بسرعة.
+            </p>
+            <div class="project-card__links">
+              <a href="#" class="link" aria-label="رابط المشروع (Placeholder)">رابط العرض</a>
+              <a href="#" class="link" aria-label="رابط تفاصيل (Placeholder)">تفاصيل</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-card__top">
+              <h3>لوحة مطابقات الموردين</h3>
+              <span class="pill">Vendors</span>
+            </div>
+            <p>
+              منهجية لمراجعة أرصدة الموردين، تحديد أسباب الفروقات (فواتير/دفعات/إشعارات)،
+              وتوثيق الملاحظات لإغلاق سريع ومنضبط.
+            </p>
+            <div class="project-card__links">
+              <a href="#" class="link" aria-label="رابط المشروع (Placeholder)">رابط العرض</a>
+              <a href="#" class="link" aria-label="رابط تفاصيل (Placeholder)">تفاصيل</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-card__top">
+              <h3>التسوية البنكية بخطوات قياسية</h3>
+              <span class="pill">Bank</span>
+            </div>
+            <p>
+              مسار عمل يضمن مطابقة كشف البنك مع الدفاتر، تصنيف البنود المعلقة، واقتراح قيود التسوية
+              مع سجل تتبع للحركات غير المطابقة.
+            </p>
+            <div class="project-card__links">
+              <a href="#" class="link" aria-label="رابط المشروع (Placeholder)">رابط العرض</a>
+              <a href="#" class="link" aria-label="رابط تفاصيل (Placeholder)">تفاصيل</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal">
+            <div class="project-card__top">
+              <h3>تقارير تشغيلية شهرية مبسطة</h3>
+              <span class="pill">Reporting</span>
+            </div>
+            <p>
+              إعداد تقارير مختصرة: حركة الحسابات، ملخص موردين/عملاء، ومؤشرات بسيطة تساعد الإدارة
+              على رؤية الصورة بدون تعقيد.
+            </p>
+            <div class="project-card__links">
+              <a href="#" class="link" aria-label="رابط المشروع (Placeholder)">رابط العرض</a>
+              <a href="#" class="link" aria-label="رابط تفاصيل (Placeholder)">تفاصيل</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="section section--alt" id="experience">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">الخبرات</h2>
+          <p class="section__desc">
+            عرض زمني واضح يركز على الإنجاز والنتيجة.
+          </p>
+        </div>
+
+        <div class="timeline" role="list">
+          <article class="timeline-item reveal" role="listitem">
+            <div class="timeline-item__dot" aria-hidden="true"></div>
+            <div class="timeline-item__content">
+              <header class="timeline-item__header">
+                <h3>شركة تجارية (اسم بديل) — محاسب عمليات مالية</h3>
+                <p class="muted">2024 — حتى الآن</p>
+              </header>
+              <ul class="bullets">
+                <li>إدارة القيود اليومية ومراجعة المستندات لضمان دقة التسجيل.</li>
+                <li>تنفيذ تسويات بنكية دورية مع تتبع البنود المعلقة وتقليل الفروقات.</li>
+                <li>مطابقة الموردين واكتشاف أسباب الاختلاف قبل إغلاق الفترة.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="timeline-item reveal" role="listitem">
+            <div class="timeline-item__dot" aria-hidden="true"></div>
+            <div class="timeline-item__content">
+              <header class="timeline-item__header">
+                <h3>مشاريع حسب الطلب — خدمات محاسبية عن بُعد</h3>
+                <p class="muted">2023 — حتى الآن</p>
+              </header>
+              <ul class="bullets">
+                <li>تنظيم دفاتر مبسطة للشركات الصغيرة ورواد الأعمال.</li>
+                <li>إعداد تقارير تشغيلية شهرية تساعد على متابعة التدفقات والفروقات.</li>
+                <li>تحسين أرشفة المستندات وبناء قوالب عمل قابلة للتكرار.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="timeline-item reveal" role="listitem">
+            <div class="timeline-item__dot" aria-hidden="true"></div>
+            <div class="timeline-item__content">
+              <header class="timeline-item__header">
+                <h3>بيئة ERP — تشغيل وتسجيل</h3>
+                <p class="muted">2022 — 2023</p>
+              </header>
+              <ul class="bullets">
+                <li>العمل على إدخال البيانات المحاسبية ضمن نظام ERP وفق ضوابط داخلية.</li>
+                <li>بناء روتين تحقق (Checklists) لتقليل الأخطاء وتوحيد الإدخالات.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" id="services">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">الخدمات</h2>
+          <p class="section__desc">
+            خدمات واضحة، نتائج مباشرة، وتنفيذ حسب الطلب.
+          </p>
+        </div>
+
+        <div class="services-grid">
+          <article class="service-card reveal">
+            <h3>مسك الدفاتر والقيود اليومية</h3>
+            <p>تسجيل قيود دقيقة مبنية على مستندات واضحة، مع تنظيم الحسابات وإعداد ملخصات تشغيلية.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <h3>إدارة الموردين والعملاء</h3>
+            <p>مطابقة الأرصدة، كشف الفروقات، وتتبع أسبابها لضمان إقفال منضبط وتقارير موثوقة.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <h3>التسويات البنكية</h3>
+            <p>تسويات دورية، تصنيف البنود المعلقة، وتوصيات قيود تسوية مع سجل تتبع واضح.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <h3>إعداد تقارير مالية مبسطة</h3>
+            <p>تقارير شهرية مختصرة ومرئية تساعد الإدارة على اتخاذ قرار سريع بدون تعقيد.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Career Objective -->
+    <section class="section section--alt" id="objective">
+      <div class="container">
+        <div class="objective reveal">
+          <h2 class="section__title">الهدف المهني</h2>
+          <p class="objective__text">
+            هدفي هو التخصص أكثر في <strong>عمليات المحاسبة والتسويات</strong> ضمن شركة احترافية داخل السعودية،
+            وبناء مسار مهني قوي يقود إلى دور إشرافي يعتمد على منهجيات واضحة، تقارير دقيقة، وانضباط في الإقفال الشهري.
+            وبالتوازي، أقدم خدمات عن بُعد للشركات الصغيرة لمساعدتها على ضبط حساباتها من اليوم الأول.
+          </p>
+          <div class="objective__actions">
+            <a class="btn btn--primary" href="#contact">للتوظيف أو التعاون</a>
+            <a class="btn btn--ghost" href="#projects">مشاهدة الأعمال</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">تواصل معي</h2>
+          <p class="section__desc">اترك رسالة وسأرد عليك بأسرع وقت ممكن. (النموذج بدون Backend)</p>
+        </div>
+
+        <div class="contact">
+          <form class="contact-form reveal" autocomplete="on">
+            <div class="field">
+              <label for="name">الاسم</label>
+              <input id="name" name="name" type="text" placeholder="اسمك الكامل" required />
+            </div>
+
+            <div class="field">
+              <label for="email">البريد الإلكتروني</label>
+              <input id="email" name="email" type="email" placeholder="name@example.com" required />
+            </div>
+
+            <div class="field">
+              <label for="subject">الموضوع</label>
+              <input id="subject" name="subject" type="text" placeholder="توظيف / مشروع / استفسار" />
+            </div>
+
+            <div class="field">
+              <label for="message">رسالتك</label>
+              <textarea id="message" name="message" rows="5" placeholder="اكتب تفاصيل طلبك..." required></textarea>
+            </div>
+
+            <button class="btn btn--primary" type="submit">إرسال</button>
+            <p class="form-hint" id="formHint" aria-live="polite"></p>
+          </form>
+
+          <aside class="contact-side reveal" aria-label="روابط التواصل الاجتماعي">
+            <div class="contact-card">
+              <h3>روابط مباشرة</h3>
+              <p class="muted">ضع روابطك هنا (عناصر بديلة قابلة للتعديل).</p>
+
+              <div class="social">
+                <a class="social__link" href="#" aria-label="YouTube (Placeholder)">YouTube</a>
+                <a class="social__link" href="#" aria-label="LinkedIn (Placeholder)">LinkedIn</a>
+                <a class="social__link" href="#" aria-label="GitHub (Placeholder)">GitHub</a>
+                <a class="social__link" href="#" aria-label="Facebook (Placeholder)">Facebook</a>
+              </div>
+
+              <div class="divider" aria-hidden="true"></div>
+
+              <div class="contact-mini">
+                <p><span>النطاق:</span> داخل السعودية + عن بُعد</p>
+                <p><span>الخدمة:</span> حسب الطلب</p>
+                <p><span>التخصص:</span> قيود • عهد • موردين • بنوك</p>
+              </div>
+
+              <a class="btn btn--soft" href="#home">العودة للأعلى</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© <span id="year"></span> يوسف حمدي. جميع الحقوق محفوظة.</p>
+      <a class="footer__link" href="#home">إلى الأعلى ↑</a>
+    </div>
+  </footer>
+
+  <script src="./js/script.js"></script>
+</body>
+</html>
