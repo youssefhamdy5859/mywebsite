@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
+import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Build;
 import android.os.Handler;
@@ -115,7 +116,7 @@ public class PrayerOverlayService extends Service {
                         .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
                         .setSampleRate(rate)
                         .setChannelMask(AudioFormat.CHANNEL_OUT_MONO).build();
-                AudioTrack track=new AudioTrack(attrs,format,pcm.length*2,AudioTrack.MODE_STATIC,AudioTrack.AUDIO_SESSION_ID_GENERATE);
+                AudioTrack track=new AudioTrack(attrs,format,pcm.length*2,AudioTrack.MODE_STATIC,AudioManager.AUDIO_SESSION_ID_GENERATE);
                 synchronized(PrayerOverlayService.this){audioTrack=track;}
                 track.write(pcm,0,pcm.length);
                 track.setVolume(0.45f);
