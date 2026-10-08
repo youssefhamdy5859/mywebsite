@@ -132,6 +132,45 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Create Android launch smoke script
+        shell: bash
+        run: |
+          cat > android-smoke.sh <<'BASH'
+          #!/usr/bin/env bash
+          set -euo pipefail
+
+          APK="MuhasabahNafs/app/build/outputs/apk/debug/app-debug.apk"
+          test -f "$APK"
+
+          adb uninstall com.muhasabah.nafs >/dev/null 2>&1 || true
+          adb install -r "$APK"
+          adb shell pm grant com.muhasabah.nafs android.permission.POST_NOTIFICATIONS || true
+
+          adb logcat -c
+          adb shell am force-stop com.muhasabah.nafs
+          adb shell am start -W -n com.muhasabah.nafs/.MainActivity
+          sleep 10
+
+          PID="$(adb shell pidof com.muhasabah.nafs | tr -d '\r')"
+          echo "APP_PID=$PID"
+          test -n "$PID"
+
+          adb logcat -d -v threadtime > launch-logcat.txt
+          adb shell dumpsys activity activities > activities.txt
+          adb shell uiautomator dump /sdcard/window.xml || true
+          adb pull /sdcard/window.xml window.xml || true
+          adb exec-out screencap -p > launch-screen.png
+
+          grep -q "com.muhasabah.nafs/.MainActivity" activities.txt
+
+          if grep -E "FATAL EXCEPTION|Unable to start activity|Process: com\.muhasabah\.nafs" launch-logcat.txt; then
+            echo "Detected fatal runtime exception"
+            grep -nE "FATAL EXCEPTION|Unable to start activity|Process: com\.muhasabah\.nafs|Caused by:" launch-logcat.txt | tail -n 120
+            exit 1
+          fi
+          BASH
+          chmod +x android-smoke.sh
+
       - name: Android 13 runtime smoke test
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -141,37 +180,7 @@ jobs:
           profile: pixel_5
           emulator-options: -no-snapshot-load -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           disable-animations: true
-          script: |
-            set -eu
-            APK="MuhasabahNafs/app/build/outputs/apk/debug/app-debug.apk"
-
-            # Fresh-install the exact APK that will be delivered.
-            adb uninstall com.muhasabah.nafs >/dev/null 2>&1 || true
-            adb install -r "$APK"
-            adb shell pm grant com.muhasabah.nafs android.permission.POST_NOTIFICATIONS || true
-
-            adb logcat -c
-            adb shell am force-stop com.muhasabah.nafs
-            adb shell am start -W -n com.muhasabah.nafs/.MainActivity
-            sleep 10
-
-            PID="$(adb shell pidof com.muhasabah.nafs | tr -d '\r')"
-            echo "APP_PID=$PID"
-            test -n "$PID"
-
-            adb logcat -d -v threadtime > launch-logcat.txt
-            adb shell dumpsys activity activities > activities.txt
-            adb shell uiautomator dump /sdcard/window.xml || true
-            adb pull /sdcard/window.xml window.xml || true
-            adb exec-out screencap -p > launch-screen.png
-
-            grep -q "com.muhasabah.nafs/.MainActivity" activities.txt
-
-            if grep -E "FATAL EXCEPTION|Unable to start activity|Process: com\.muhasabah\.nafs" launch-logcat.txt; then
-              echo "Detected fatal runtime exception"
-              grep -nE "FATAL EXCEPTION|Unable to start activity|Process: com\.muhasabah\.nafs|Caused by:" launch-logcat.txt | tail -n 120
-              exit 1
-            fi
+          script: bash android-smoke.sh
 
       - name: Upload runtime diagnostics
         if: always()
