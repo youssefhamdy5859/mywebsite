@@ -40,6 +40,12 @@ jobs:
           # Avoid inflating a VectorDrawable through <bitmap> during Activity theme creation.
           sed -i 's#@drawable/splash_background#@color/splash_bg_color#g' \
             MuhasabahNafs/app/src/main/res/values/themes.xml
+          cat > MuhasabahNafs/app/src/main/res/drawable/splash_background.xml <<'XML'
+          <?xml version="1.0" encoding="utf-8"?>
+          <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+              <item android:drawable="@color/splash_bg_color" />
+          </layer-list>
+          XML
 
           # BiometricPrompt requires a FragmentActivity host.
           sed -i 's/import androidx.activity.ComponentActivity/import androidx.fragment.app.FragmentActivity/' \
