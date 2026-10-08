@@ -1,4 +1,4 @@
-name: Build Muhasabah APK
+name: Build and runtime-test Muhasabah APK
 
 on:
   push:
@@ -10,14 +10,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
     steps:
       - name: Checkout build branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Rebuild source archive
         shell: bash
@@ -27,20 +27,25 @@ jobs:
           unzip -q MuhasabahNafs_build_ready.zip
           test -f MuhasabahNafs/app/build.gradle.kts
 
-      - name: Fix extracted Android project
+      - name: Apply consolidated Android fixes
         shell: bash
         run: |
+          set -euo pipefail
+
+          # Fix invalid launcher vector namespaces.
           sed -i 's#http://schemas.android.com/apk/res/vector#http://schemas.android.com/apk/res/android#g' \
             MuhasabahNafs/app/src/main/res/drawable/ic_launcher_background.xml \
             MuhasabahNafs/app/src/main/res/drawable/ic_launcher_foreground.xml
-          sed -i 's#@mipmap/ic_launcher_foreground#@drawable/ic_launcher_foreground#g' \
-            MuhasabahNafs/app/src/main/res/drawable/splash_background.xml
 
+          # Avoid inflating a VectorDrawable through <bitmap> during Activity theme creation.
+          sed -i 's#@drawable/splash_background#@color/splash_bg_color#g' \
+            MuhasabahNafs/app/src/main/res/values/themes.xml
+
+          # BiometricPrompt requires a FragmentActivity host.
           sed -i 's/import androidx.activity.ComponentActivity/import androidx.fragment.app.FragmentActivity/' \
             MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/MainActivity.kt
           sed -i 's/class MainActivity : ComponentActivity()/class MainActivity : FragmentActivity()/' \
             MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/MainActivity.kt
-
           sed -i 's/import androidx.activity.ComponentActivity/import androidx.fragment.app.FragmentActivity/' \
             MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/security/LockScreen.kt
           sed -i 's/context as? ComponentActivity/context as? FragmentActivity/' \
@@ -48,48 +53,142 @@ jobs:
           sed -i 's/showBiometricPrompt(activity: ComponentActivity/showBiometricPrompt(activity: FragmentActivity/' \
             MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/security/LockScreen.kt
 
-          # SQLCipher must load its native libraries before Room opens the encrypted DB.
+          # Make FragmentActivity an explicit dependency.
+          if ! grep -q 'androidx.fragment:fragment-ktx' MuhasabahNafs/app/build.gradle.kts; then
+            sed -i '/androidx.activity:activity-compose:1.9.1/a\    implementation("androidx.fragment:fragment-ktx:1.8.2")' \
+              MuhasabahNafs/app/build.gradle.kts
+          fi
+
+          # SQLCipher native libraries must be loaded before Room opens the encrypted DB.
           python3 - <<'PY'
           from pathlib import Path
           p = Path("MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/di/DatabaseModule.kt")
           s = p.read_text()
-          needle = "    ): AppDatabase {\n"
-          replacement = "    ): AppDatabase {\n        net.sqlcipher.database.SQLiteDatabase.loadLibs(context)\n"
+          marker = "    ): AppDatabase {\n"
           if "SQLiteDatabase.loadLibs(context)" not in s:
-              if needle not in s:
+              if marker not in s:
                   raise SystemExit("Database provider signature not found")
-              s = s.replace(needle, replacement, 1)
+              s = s.replace(marker, marker + "        net.sqlcipher.database.SQLiteDatabase.loadLibs(context)\n", 1)
+          p.write_text(s)
+          PY
+
+          # This project doesn't ship/manage Room schema JSON files.
+          sed -i 's/exportSchema = true/exportSchema = false/' \
+            MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/data/local/AppDatabase.kt
+
+          # Prevent reminder scheduling from throwing on Android 12+ when exact-alarm access isn't granted.
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/notifications/ReminderScheduler.kt")
+          s = p.read_text()
+          if "import android.os.Build" not in s:
+              s = s.replace("import android.content.Intent\n", "import android.content.Intent\nimport android.os.Build\n")
+          old = "        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)"
+          new = """        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+              alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+          } else {
+              alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+          }"""
+          if old in s:
+              s = s.replace(old, new)
           p.write_text(s)
           PY
 
           grep -n "FragmentActivity" MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/MainActivity.kt
-          grep -n "FragmentActivity" MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/security/LockScreen.kt
           grep -n "SQLiteDatabase.loadLibs" MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/di/DatabaseModule.kt
+          grep -n "windowBackground" MuhasabahNafs/app/src/main/res/values/themes.xml
 
       - name: Set up Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Set up Gradle 8.7
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: '8.7'
 
-      - name: Build installable APK
+      - name: Run JVM tests and build APK
         working-directory: MuhasabahNafs
-        run: gradle --no-daemon :app:assembleDebug --stacktrace
+        run: gradle --no-daemon :app:testDebugUnitTest :app:assembleDebug --stacktrace
 
-      - name: Verify APK
+      - name: Verify APK exists
         shell: bash
         run: |
           test -f MuhasabahNafs/app/build/outputs/apk/debug/app-debug.apk
           ls -lh MuhasabahNafs/app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Upload APK artifact
+      - name: Enable KVM
+        shell: bash
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Android 13 runtime smoke test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          arch: x86_64
+          target: google_apis
+          profile: pixel_5
+          emulator-options: -no-snapshot-load -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          disable-animations: true
+          script: |
+            set -euo pipefail
+            APK="MuhasabahNafs/app/build/outputs/apk/debug/app-debug.apk"
+
+            # Run the instrumented Room tests first.
+            cd MuhasabahNafs
+            gradle --no-daemon :app:connectedDebugAndroidTest --stacktrace
+            cd ..
+
+            # Fresh-install the exact APK that will be delivered.
+            adb uninstall com.muhasabah.nafs >/dev/null 2>&1 || true
+            adb install -r "$APK"
+            adb shell pm grant com.muhasabah.nafs android.permission.POST_NOTIFICATIONS || true
+
+            adb logcat -c
+            adb shell am force-stop com.muhasabah.nafs
+            adb shell am start -W -n com.muhasabah.nafs/.MainActivity
+            sleep 10
+
+            PID="$(adb shell pidof com.muhasabah.nafs | tr -d '\r')"
+            echo "APP_PID=$PID"
+            test -n "$PID"
+
+            adb logcat -d -v threadtime > launch-logcat.txt
+            adb shell dumpsys activity activities > activities.txt
+            adb shell uiautomator dump /sdcard/window.xml || true
+            adb pull /sdcard/window.xml window.xml || true
+            adb exec-out screencap -p > launch-screen.png
+
+            grep -q "com.muhasabah.nafs/.MainActivity" activities.txt
+
+            if grep -E "FATAL EXCEPTION|Unable to start activity|Process: com\.muhasabah\.nafs" launch-logcat.txt; then
+              echo "Detected fatal runtime exception"
+              grep -nE "FATAL EXCEPTION|Unable to start activity|Process: com\.muhasabah\.nafs|Caused by:" launch-logcat.txt | tail -n 120
+              exit 1
+            fi
+
+      - name: Upload runtime diagnostics
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: MuhasabahNafs-installable-apk
+          name: MuhasabahNafs-runtime-diagnostics
+          path: |
+            launch-logcat.txt
+            activities.txt
+            window.xml
+            launch-screen.png
+            MuhasabahNafs/app/build/reports/tests/testDebugUnitTest/**
+            MuhasabahNafs/app/build/reports/androidTests/connected/**
+          if-no-files-found: ignore
+
+      - name: Upload installable APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MuhasabahNafs-tested-apk
           path: MuhasabahNafs/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
