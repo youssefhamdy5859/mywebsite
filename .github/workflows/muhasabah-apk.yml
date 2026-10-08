@@ -27,16 +27,29 @@ jobs:
           unzip -q MuhasabahNafs_build_ready.zip
           test -f MuhasabahNafs/app/build.gradle.kts
 
-      - name: Fix Android vector XML namespaces
+      - name: Fix extracted Android project
         shell: bash
         run: |
           sed -i 's#http://schemas.android.com/apk/res/vector#http://schemas.android.com/apk/res/android#g' \
             MuhasabahNafs/app/src/main/res/drawable/ic_launcher_background.xml \
             MuhasabahNafs/app/src/main/res/drawable/ic_launcher_foreground.xml
-          grep -R "schemas.android.com/apk/res/android" MuhasabahNafs/app/src/main/res/drawable/ic_launcher_*.xml
           sed -i 's#@mipmap/ic_launcher_foreground#@drawable/ic_launcher_foreground#g' \
             MuhasabahNafs/app/src/main/res/drawable/splash_background.xml
-          grep -n "ic_launcher_foreground" MuhasabahNafs/app/src/main/res/drawable/splash_background.xml
+
+          sed -i 's/import androidx.activity.ComponentActivity/import androidx.fragment.app.FragmentActivity/' \
+            MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/MainActivity.kt
+          sed -i 's/class MainActivity : ComponentActivity()/class MainActivity : FragmentActivity()/' \
+            MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/MainActivity.kt
+
+          sed -i 's/import androidx.activity.ComponentActivity/import androidx.fragment.app.FragmentActivity/' \
+            MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/security/LockScreen.kt
+          sed -i 's/context as? ComponentActivity/context as? FragmentActivity/' \
+            MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/security/LockScreen.kt
+          sed -i 's/showBiometricPrompt(activity: ComponentActivity/showBiometricPrompt(activity: FragmentActivity/' \
+            MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/security/LockScreen.kt
+
+          grep -n "FragmentActivity" MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/MainActivity.kt
+          grep -n "FragmentActivity" MuhasabahNafs/app/src/main/java/com/muhasabah/nafs/security/LockScreen.kt
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
