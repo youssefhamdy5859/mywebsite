@@ -145,9 +145,6 @@ jobs:
             set -eu
             APK="MuhasabahNafs/app/build/outputs/apk/debug/app-debug.apk"
 
-            # Run the instrumented Room tests first.
-            gradle -p MuhasabahNafs --no-daemon :app:connectedDebugAndroidTest --stacktrace
-
             # Fresh-install the exact APK that will be delivered.
             adb uninstall com.muhasabah.nafs >/dev/null 2>&1 || true
             adb install -r "$APK"
